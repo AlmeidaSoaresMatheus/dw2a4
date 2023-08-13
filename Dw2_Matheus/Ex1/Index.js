@@ -1,53 +1,64 @@
-function criarCirculo(raio,pi1,pi2,pi3) {
+// Define uma função para criar um objeto de círculo com o raio especificado
+function criarCirculo(raio) {
 
-    const piValues = [3.14, 3.14159, 3.1415926536];
-
-    Object.defineProperties(this, {
-        pi1:{
-            value: pi1,
-            enumerable: true,
-            writable: false,
-            configurable: false
-        },
-        pi2:{
-            value: pi2,
-            enumerable: true,
-            writable: false,
-            configurable: false
-        },
-        pi3:{
-            value: pi3,
-            enumerable: true,
-            writable: false,
-            configurable: false
-        },
-
-
-    })
-  
-    function calcularArea(pi) {
-      return pi * raio * raio;
-    }
-  
-    function calcularCircunferencia(pi) {
-      return 2 * pi * raio;
-    }
-  
-    return {
-      calcularArea: function() {
-        return piValues.map(pi => calcularArea(pi));
+  // Usa o Object.defineProperties para definir propriedades e métodos em 'this' (o objeto criado)
+  Object.defineProperties(this, {
+      raio: {
+          configurable: false,
+          get: function() {
+              return raio;
+          },
+          set: function(value) {
+              if (value <= 0) {
+                  throw new Error("O raio deve ser maior que zero");
+              }
+              raio = value;
+          }
       },
-      calcularCircunferencia: function() {
-        return piValues.map(pi => calcularCircunferencia(pi));
+      pi1: {
+          value: 3.14,
+          enumerable: true,       // Pode ser enumerado em loops
+          writable: false,       // Não pode ser modificado
+          configurable: false    // Não pode ser excluído ou configurado
+      },
+      pi2: {
+          value: 3.1415,
+          enumerable: true,
+          writable: false,
+          configurable: false
+      },
+      pi3: {
+          value: 3.1415926536,
+          enumerable: true,
+          writable: false,
+          configurable: false
+      },
+      // Define método para calcular a área com base no valor de PI
+      calcularArea: {
+          value: function(pi) {
+              return pi * raio * raio;
+          },
+          enumerable: false    
+      },
+      calcularCircunferencia: {
+          value: function(pi) {
+              return 2 * pi * raio;
+          },
+          enumerable: false
+      },
+      imprimirValores: {
+          value: function() {
+              const piValues = [this.pi1, this.pi2, this.pi3]; // Correção: Obtém os valores de PI do próprio objeto
+              piValues.forEach(pi => {
+                  console.log(`PI: ${pi}, Área: ${this.calcularArea(pi)}, Perímetro: ${this.calcularCircunferencia(pi)}`);
+              });
+          },
+          enumerable: false
       }
-    };
-  }
+  });
 
-  const circulo = criarCirculo(5); // Definindo o raio do círculo como 5
-  const area = circulo.calcularArea();
-  const circunferencia = circulo.calcularCircunferencia();
-  
-  console.log(circulo)
-  console.log(area)
-  console.log(circunferencia)
-  
+  return this;    
+}
+
+const circulo = criarCirculo(5);
+circulo.imprimirValores();
